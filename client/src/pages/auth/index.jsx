@@ -70,13 +70,23 @@ const Auth = () =>{
   }
 
   const handleSignup = async() => {
-    if(validateSignup()){
-      const response = await apiClient.post(SIGNUP_ROUTE,{email, password},{withCredentials:true});
-      if(response.status === 201){
-        setUserInfo(response.data.user);
-        navigate("/profile");
+    if(validateSignup()){try{
+        const response = await apiClient.post(SIGNUP_ROUTE,{email, password},{withCredentials:true});
+        if(response.status === 201){
+          setUserInfo(response.data.user);
+          navigate("/profile");
+        }
+        console.log(response);
       }
-      console.log(response);
+      catch(error){
+        console.log(error);
+        if(error.response.data){
+          toast.error(error.response.data);
+        }
+        else {
+          toast.error(error.message);
+        }
+      }
     }
   }
 
