@@ -48,12 +48,23 @@ const Auth = () =>{
 
   const handleLogin = async() =>{
     if(validateLogin()){
-      const response = await apiClient.post(LOGIN_ROUTE,{email, password},{withCredentials:true});
-      console.log(response);
-      setUserInfo(response.data.user);
-      if(response.data.user.id){
-        if(response.data.user.profileSetup) navigate("/chat");
-        else navigate("/profile");
+      try{
+        const response = await apiClient.post(LOGIN_ROUTE,{email, password},{withCredentials:true});
+        console.log(response);
+        setUserInfo(response.data.user);
+        if(response.data.user.id){
+          if(response.data.user.profileSetup) navigate("/chat");
+          else navigate("/profile");
+        }
+      }
+      catch(error){
+        console.log({error});
+        if(error.response.data){
+          toast.error(error.response.data);
+        }
+        else {
+          toast.error(error.message);
+        }
       }
     }
   }
